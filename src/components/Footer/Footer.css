@@ -1,0 +1,66 @@
+.rodape {
+  background: var(--papel);
+  color: var(--tinta);
+  text-align: center;
+  padding: 36px 16px 28px;
+  margin-top: 48px;
+
+  border-top: 4px double var(--urgente);
+}
+
+.rodape__marca {
+  font-family: var(--fonte-manchete);
+  font-size: 22px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.rodape__fundacao {
+  font-family: var(--fonte-ui);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.rodape__links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 0;
+  margin: 18px 0;
+  font-family: var(--fonte-ui);
+  font-size: 13px;
+}
+.rodape__links a {
+  color: var(--tinta);
+  text-decoration: none;
+  padding: 0 14px;
+  opacity: 0.85;
+}
+.rodape__links a:hover {
+  opacity: 1;
+}
+
+.rodape__links a::after {
+  content: "·";
+  opacity: 0.5;
+  margin-left: 28px;
+  pointer-events: none;
+}
+
+.rodape__links a:last-child::after {
+  content: "";
+  margin: 0;
+}
+
+.rodape__creditos {
+  font-family: var(--fonte-ui);
+  font-size: 11px;
+  line-height: 1.6;
+  opacity: 0.55;
+  max-width: 52ch;
+  margin: 0 auto;
+}

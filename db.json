@@ -1,0 +1,39 @@
+{
+  "noticias": [
+    {
+      "id": 1,
+      "categoria": "Ameaças Urbanas",
+      "titulo": "Homem-Aranha destrói viaduto e chama de \"resgate\"",
+      "resumo": "Prejuízo estimado em milhões. Prefeitura estuda enviar a conta ao vigilante mascarado.",
+      "texto": "Testemunhas relatam que o vigilante mascarado lançou suas teias sem qualquer licença ambiental. A prefeitura calcula o prejuízo enquanto este editor pergunta: até quando?"
+    },
+    {
+      "id": 2,
+      "categoria": "Cidade",
+      "titulo": "Metrô da linha F terá horário estendido no verão",
+      "resumo": "Medida atende pedido antigo dos moradores do Queens.",
+      "texto": "A ampliação começa em julho e deve beneficiar cerca de 200 mil passageiros diários."
+    },
+    {
+      "id": 3,
+      "categoria": "Opinião do Editor",
+      "titulo": "Máscaras escondem rostos — e intenções",
+      "resumo": "Se ele fosse herói de verdade, mostraria a cara. Simples assim.",
+      "texto": "Nunca vi um bombeiro de máscara. Nunca vi um médico anônimo. Por que aceitaríamos um vigilante que não assina o que faz?"
+    },
+    {
+      "id": 4,
+      "categoria": "Esportes",
+      "titulo": "Knicks vencem no estouro do cronômetro",
+      "resumo": "Madison Square Garden foi ao delírio na noite de quarta.",
+      "texto": "A cesta veio a 0,8 segundo do fim e garantiu a vaga nos playoffs."
+    },
+    {
+      "id": 5,
+      "categoria": "Esportes",
+      "titulo": "Knicks vencem no estouro do cronômetro",
+      "resumo": "Madison Square Garden foi ao delírio na noite de quarta.",
+      "texto": "A cesta veio a 0,8 segundo do fim e garantiu a vaga nos playoffs."
+    }
+  ]
+}
