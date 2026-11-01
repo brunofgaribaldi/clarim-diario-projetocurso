@@ -19,23 +19,34 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 // createRoot conecta o React à <div id="root"> que existe no index.html.
 // Tudo que o React desenha vai "morar" dentro dessa div.
-console.log("Client ID: ", import.meta.env.VITE_GOOGLE_CLIENT_ID);
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 createRoot(document.getElementById("root")).render(
   // Cada componente que ENVOLVE outro adiciona uma "camada" de recurso.
   // Pense em cebola: o App fica no centro, cercado por essas camadas.
   <StrictMode>
     {" "}
     {/* modo de desenvolvimento: avisa sobre práticas arriscadas */}
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    {googleClientId ? (
+      <GoogleOAuthProvider clientId={googleClientId}>
+        <BrowserRouter>
+          {" "}
+          {/* habilita as rotas/URLs (react-router) na árvore toda */}
+          <AuthProvider>
+            {" "}
+            {/* disponibiliza o usuário logado para qualquer componente */}
+            <App /> {/* nosso app de fato */}
+          </AuthProvider>
+        </BrowserRouter>
+      </GoogleOAuthProvider>
+    ) : (
       <BrowserRouter>
         {" "}
-        {/* habilita as rotas/URLs (react-router) na árvore toda */}
         <AuthProvider>
           {" "}
-          {/* disponibiliza o usuário logado para qualquer componente */}
-          <App /> {/* nosso app de fato */}
+          <App />
         </AuthProvider>
       </BrowserRouter>
-    </GoogleOAuthProvider>
+    )}
   </StrictMode>,
 );

@@ -25,10 +25,11 @@ function App() {
     if (salvo) return salvo;
 
     // 2º) Nunca escolheu? Perguntamos ao SISTEMA operacional a preferência.
-    // Atenção: a media query é 'prefers-color-scheme' (prefers, com R).
-    const preferenciaEscuro = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
+    // Em alguns ambientes de teste (jsdom) ou navegadores antigos,
+    // `window.matchMedia` pode não existir; nesse caso, respeitamos o
+    // fallback em claro em vez de quebrar a renderização inteira.
+    const temMatchMedia = typeof window !== "undefined" && typeof window.matchMedia === "function";
+    const preferenciaEscuro = temMatchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
     if (preferenciaEscuro) return "dark";
 
     // 3º) Padrão de fallback: tema claro.

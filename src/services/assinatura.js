@@ -21,3 +21,8 @@ export async function iniciarCheckout(planoId) {
   const { data } = await api.post('/api/assinaturas/checkout', { planoId })
   return data.url   // a página de pagamento do Stripe — o PASSO 2 é ir até lá
 }
+
+export async function confirmarCheckout(sessionId) {
+  const { data } = await api.post('/api/assinaturas/confirmar', { sessionId })
+  return data.ativa
+}

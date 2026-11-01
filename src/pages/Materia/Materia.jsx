@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import { buscarNoticia } from "../../services/noticias";
 import "./Materia.css";
 
 function Materia() {
   const { id } = useParams();
+  const { usuario } = useAuth();
 
   const [noticia, setNoticia] = useState(null);
   const [carregando, setCarregando] = useState(true);
@@ -51,9 +53,18 @@ function Materia() {
       <h1>{noticia.titulo}</h1>
       <p className="materia__resumo">{noticia.resumo}</p>
 
-      <div className="materia__texto">
-        <p>{noticia.texto}</p>
-      </div>
+      {noticia.bloqueada ? (
+        <section className="materia__bloqueio" aria-live="polite">
+          <p>Esta matéria é exclusiva para assinantes.</p>
+          <Link to={usuario ? "/assinar" : "/cadastro"}>
+            {usuario ? "Ver planos de assinatura" : "Cadastre-se para assinar"}
+          </Link>
+        </section>
+      ) : (
+        <div className="materia__texto">
+          <p>{noticia.texto}</p>
+        </div>
+      )}
     </main>
   );
 }

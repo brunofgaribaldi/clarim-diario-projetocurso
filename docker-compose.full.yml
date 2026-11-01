@@ -1,0 +1,25 @@
+services:
+  api:
+    build:
+      context: "E:/Bruno/Curso/MaisPraTi/API/api/api/api"
+      dockerfile: Dockerfile
+    env_file:
+      - "E:/Bruno/Curso/MaisPraTi/API/api/api/api/.env"
+    environment:
+      DATABASE_URL: jdbc:postgresql://host.docker.internal:5432/clarim_diario
+      PORT: 8080
+    ports:
+      - "8081:8080"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:8081
+    environment:
+      VITE_API_URL: http://localhost:8081
+    ports:
+      - "5173:80"
+    depends_on:
+      - api

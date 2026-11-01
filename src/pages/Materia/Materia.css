@@ -51,3 +51,15 @@
 .materia__texto p {
     margin-bottom: 20px;
 }
+
+.materia__bloqueio {
+    max-width: 65ch;
+    padding: 20px;
+    border: 1px solid var(--urgente);
+    font-family: var(--fonte-ui);
+}
+
+.materia__bloqueio a {
+    color: var(--urgente);
+    font-weight: bold;
+}

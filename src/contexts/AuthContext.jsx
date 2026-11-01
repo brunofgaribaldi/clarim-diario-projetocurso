@@ -22,7 +22,14 @@ export function AuthProvider({ children }) {
   // para que o login sobreviva a um F5 (refresh) da página.
   const [usuario, setUsuario] = useState(() => {
     const salvo = localStorage.getItem("usuario");
-    return salvo ? JSON.parse(salvo) : null; // JSON.parse: texto → objeto
+    if (!salvo) return null;
+
+    try {
+      return JSON.parse(salvo);
+    } catch {
+      localStorage.removeItem("usuario");
+      return null;
+    }
   });
 
   // ⚠️ Didático: em produção NUNCA valide senha no front-end assim.

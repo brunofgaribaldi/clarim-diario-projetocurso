@@ -1,17 +1,64 @@
-# React + Vite
+# Clarim Diário
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação React para o jornal Clarim Diário.
 
-Currently, two official plugins are available:
+## Rodando em desenvolvimento
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+## Build de produção
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm run build
+```
 
-## Expanding the ESLint configuration
+## Docker
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# clarim-diario-projetocurso
+Este projeto já está preparado para ser empacotado em container com Vite + Nginx.
+
+### Build local da imagem do frontend
+
+```bash
+docker build -t clarim-diario-front .
+```
+
+### Rodar apenas o frontend
+
+```bash
+docker run --rm -p 5173:80 clarim-diario-front
+```
+
+A aplicação fica disponível em http://localhost:5173.
+
+### Docker Compose do frontend isolado
+
+```bash
+docker compose up --build
+```
+
+### Docker Compose (frontend + backend)
+
+No mesmo diretório do frontend, existe também o arquivo [docker-compose.full.yml](./docker-compose.full.yml). Ele sobe:
+
+- backend Spring em http://localhost:8081 (o 8080 foi deixado livre para evitar conflitos locais)
+- usa o PostgreSQL já instalado no Windows, o mesmo acessado pelo pgAdmin, em localhost:5432
+- frontend em http://localhost:5173
+
+```bash
+docker compose -f docker-compose.full.yml up --build
+```
+
+O Compose usa `host.docker.internal` para a API alcançar o PostgreSQL do Windows. As credenciais são lidas do arquivo `.env` do backend, configurado em `docker-compose.full.yml`. O serviço PostgreSQL precisa estar ligado; o IntelliJ pode ficar fechado.
+
+Para derrubar tudo:
+
+```bash
+docker compose -f docker-compose.full.yml down
+```
+
+## API
+
+A API do backend já está dockerizada em outro repositório e é chamada pelo frontend em `http://localhost:8081`.

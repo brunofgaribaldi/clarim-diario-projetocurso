@@ -1,26 +1,85 @@
-// src/pages/Assinar/AssinaturaSucesso.jsx
-//
-// PASSO 3 do fluxo: para onde o Stripe manda o navegador de volta depois
-// de um pagamento BEM-SUCEDIDO (ver CheckoutService.criarSessao,
-// .setSuccessUrl(frontUrl + "/assinatura/sucesso?session_id=...")).
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { confirmarCheckout } from "../../services/assinatura";
 
 function AssinaturaSucesso() {
-  // Repare no que esta página NÃO faz: ela não ativa nada, não chama
-  // a API, não confia em nada da URL (nem olha o `session_id` da query
-  // string). Qualquer pessoa pode digitar este endereço de propósito ou
-  // por acaso. A ativação real acontece no PASSO 4 — o webhook do Stripe
-  // chamando StripeSincronizacaoService lá no backend, servidor-a-servidor,
-  // de um jeito que o visitante não controla. Por isso a mensagem é
-  // honesta: "em instantes", não "pronto, liberado".
+  const [searchParams] = useSearchParams();
+  const { usuario } = useAuth();
+  const sessionId = searchParams.get("session_id");
+  const [estado, setEstado] = useState("verificando");
+
+  async function verificarPagamento() {
+    setEstado("verificando");
+    try {
+      const ativa = await confirmarCheckout(sessionId);
+      setEstado(ativa ? "ativa" : "pendente");
+    } catch {
+      setEstado("erro");
+    }
+  }
+
+  useEffect(() => {
+    if (!sessionId) {
+      setEstado("sessao-ausente");
+      return;
+    }
+    if (!usuario) {
+      setEstado("login-necessario");
+      return;
+    }
+
+    let ativa = true;
+    confirmarCheckout(sessionId)
+      .then((confirmada) => {
+        if (ativa) setEstado(confirmada ? "ativa" : "pendente");
+      })
+      .catch(() => {
+        if (ativa) setEstado("erro");
+      });
+
+    return () => {
+      ativa = false;
+    };
+  }, [sessionId, usuario]);
+
   return (
     <main className="container">
-      <h1>Pagamento recebido!</h1>
-      <p>
-        Sua assinatura será ativada em instantes. Obrigado por apoiar o
-        jornalismo do Clarim.
-      </p>
-      <Link to="/">Voltar à capa</Link>
+      {estado === "verificando" && <p>Confirmando seu pagamento...</p>}
+      {estado === "ativa" && (
+        <>
+          <h1>Assinatura ativada!</h1>
+          <p>Seu acesso às matérias exclusivas já está liberado.</p>
+          <Link to="/">Voltar à capa</Link>
+        </>
+      )}
+      {estado === "pendente" && (
+        <>
+          <h1>Pagamento em processamento</h1>
+          <p>O Stripe ainda está confirmando o pagamento. Tente novamente em instantes.</p>
+          <button onClick={verificarPagamento}>Verificar novamente</button>
+        </>
+      )}
+      {estado === "erro" && (
+        <>
+          <h1>Não foi possível confirmar agora</h1>
+          <p>Seu pagamento pode ter sido concluído. Tente verificar novamente em instantes.</p>
+          <button onClick={verificarPagamento}>Tentar novamente</button>
+        </>
+      )}
+      {estado === "login-necessario" && (
+        <>
+          <h1>Entre para confirmar sua assinatura</h1>
+          <p>Use a mesma conta Clarim usada antes de iniciar o pagamento.</p>
+          <Link to="/login">Entrar</Link>
+        </>
+      )}
+      {estado === "sessao-ausente" && (
+        <>
+          <h1>Sessão de pagamento não encontrada</h1>
+          <Link to="/">Voltar à capa</Link>
+        </>
+      )}
     </main>
   );
 }
